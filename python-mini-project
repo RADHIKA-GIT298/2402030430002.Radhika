@@ -1,0 +1,55 @@
+import numpy as np
+board = np.full((3, 3), ' ')
+def display_board():
+    print("\n")
+    for row in board:
+        print(" | ".join(row))
+        print("-" * 5)
+
+
+def check_winner(player):
+    for i in range(3):
+        if np.all(board[i, :] == player) or np.all(board[:, i] == player):
+            return True
+    if np.all(np.diag(board) == player) or np.all(np.diag(np.fliplr(board)) == player):
+        return True
+    return False
+
+
+def is_draw():
+    return np.all(board != ' ')
+
+
+def play_game():
+    current_player = 'X'
+    while True:
+        display_board()
+        print(f"Player {current_player}'s turn")
+
+        try:
+            row = int(input("Enter row (0-2): "))
+            col = int(input("Enter column (0-2): "))
+            if board[row, col] != ' ':
+                print("Cell already taken, try again.")
+                continue
+        except:
+            print("Invalid input. Use numbers 0, 1, or 2.")
+            continue
+
+        board[row, col] = current_player
+
+        if check_winner(current_player):
+            display_board()
+            print(f"🎉 Player {current_player} wins!")
+            break
+
+        if is_draw():
+            display_board()
+            print("It's a draw!")
+            break
+
+     
+        current_player = 'O' if current_player == 'X' else 'X'
+
+
+play_game()
